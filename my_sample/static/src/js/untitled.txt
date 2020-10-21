@@ -1,0 +1,16 @@
+odoo.define('website.certificadoVigencia', function(require) {
+'use strict';
+    
+    const Class = require('web.Class');
+    const rpc = require('web.rpc');
+        
+    const CertificadoVigencia = Class.extend({ //data, _this
+        traer_data: function() {
+            console.log('CertificadoVigencia......');
+        }
+    })
+    
+    const certificadoVigencia = new CertificadoVigencia();
+    certificadoVigencia.traer_data();
+    
+})

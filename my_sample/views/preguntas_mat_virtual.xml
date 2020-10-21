@@ -1,0 +1,116 @@
+<odoo>
+    <data>
+        <template id="preguntas_mat_virtual">
+            <t t-call="website.layout">
+                <t t-set="additional_title">Solicitud Duplicado Virtual</t>
+                <h1 class="formTitle mt-5 mb-5">
+                    <font>ACTIVACIÓN DE MATRÍCULA O CERTIFICADO DE INSCRIPCIÓN PROFESIONAL VIRTUAL</font>
+                </h1>
+                <h1 class="formTitle mt-0">
+                    <font><t t-esc="tramite.x_studio_nombres" /> <t t-esc="tramite.x_studio_apellidos" /></font>
+                </h1>
+                <div class="container">
+                    <div class="formSection mt-3">
+                        <form id="form_respuestas">
+                            <div class="row col-md-12 form-group form-field o_fake_not_editable o_website_form_required_custom">
+                                <div class="col-md-12">
+                                    <label class="col-form-label o_fake_editable" for="universidades"> Universidad donde se graduo </label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="text" id="universidades" placeholder="Buscar..." class="form-control"/>
+                                    <ul class="list-group" id="result_univ"></ul>
+                                    <select class="form-control invisible i_required"
+                                            aria-hidden="true" name="x_institution_ID" id="x_institution_ID">
+                                        <option id="seleccion_univ" value="" selected="true">universidad</option>
+                                    </select>
+                                </div> 
+                            </div> 
+                            <div class="row col-md-12 form-group form-field o_fake_not_editable o_website_form_required_custom">
+                                <div class="col-md-12">
+                                    <label class="col-form-label o_fake_editable" for="carreras"> Carrera registrada </label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="text" id="carreras" placeholder="Buscar..." class="form-control"/>
+                                    <ul class="list-group" id="result_univ"></ul>
+                                    <select class="form-control invisible i_required"
+                                            aria-hidden="true" name="x_career_ID" id="x_career_ID">
+                                        <option id="seleccion_univ" value="" selected="true">carrera</option>
+                                    </select>
+                                </div> 
+                            </div>   
+                            <div class="row col-md-12 form-group form-field o_fake_not_editable o_website_form_required_custom">
+                                <div class="col-md-12">
+                                    <label class="col-form-label o_fake_editable" for="x_grade_date"> Fecha de grado </label>
+                                </div>
+                                <div class="col-md-12">
+                                    <div id="fecha_grado" class="o_website_form_date input-group">
+                                        <input type="text" class="form-control i_required hand blanco" 
+                                               name="x_grade_date" readonly="true"/>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text b-rad-right">
+                                                <i class="fa fa-calendar"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-md-12 form-group form-field o_fake_not_editable o_website_form_required_custom">
+                                <div class="col-md-12">
+                                    <label class="col-form-label o_fake_editable" for="numero_matricula"> Número de Matricula </label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="text" id="numero_matricula" placeholder="Buscar..." class="form-control"/>
+                                </div> 
+                            </div>   
+                            <div class="row col-md-12 form-group form-field o_fake_not_editable o_website_form_required_custom">
+                                <div class="col-md-12">
+                                    <label class="col-form-label o_fake_editable" for="ciudad_expedicion"> Ciudad de Expedición </label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="text" id="ciudad_expedicion" placeholder="Buscar..." class="form-control"/>
+                                </div> 
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal fade" id="modal_questions" tabindex="-1" role="dialog" 
+                            aria-labelledby="modal_questionsLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md" role="document">
+                            <div class="modal-content" style="border-radius:30px;">
+                                <div class="modal-header">
+                                    <h3 class="modal-title formTitle">Responde las preguntas para confirmar tu identidad</h3>
+                                </div>
+                                <div class="modal-body text-center formSection p-2 m-3">
+                                    <form id="form_respuestas">
+                                        <div id="autocomplete_universidades">
+                                            <label class="col-form-label o_fake_editable" for="universidades"> Universidad donde se graduo </label>
+                                            <input type="text" id="universidades" placeholder="Buscar..." class="form-control"/>
+                                            <ul class="list-group" id="result_univ"></ul>
+                                            <select class="form-control invisible i_required"
+                                                    aria-hidden="true" name="x_institution_ID" id="x_institution_ID">
+                                                <option id="seleccion_univ" value="" selected="true">UNIVERSIDAD</option>
+                                            </select>
+                                        </div> 
+                                        <div id="autocomplete_carreras">
+                                            <label class="col-form-label o_fake_editable" for="carreras"> Carrera registrada </label>
+                                            <input type="text" id="carreras" placeholder="Buscar..." class="form-control"/>
+                                            <ul class="list-group" id="result_univ"></ul>
+                                            <select class="form-control invisible i_required"
+                                                    aria-hidden="true" name="x_career_ID" id="x_career_ID">
+                                                <option id="seleccion_univ" value="" selected="true">UNIVERSIDAD</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="enviar_respuestas" type="button" 
+                                            class="btn btn-primary btn-lg btn-stadium" data-dismiss="modal">Enviar</button>
+                                    <button type="button" class="btn btn-primary btn-lg btn-stadium" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
