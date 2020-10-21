@@ -1,0 +1,7 @@
+<odoo>
+    <data>
+        <template id="politica_datos">
+            
+        </template>
+    </data>
+</odoo>
