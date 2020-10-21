@@ -1,0 +1,387 @@
+#top{
+    margin-top: 15px !important;
+}
+
+.semaforo{
+    width: 35px;
+    height: 35px;
+    border: 0.5px solid #000;
+}
+
+.rojo{
+    background-color: #ff0000;
+}
+
+.verde{
+    background-color: #28a745;
+}
+
+.link-cuadro{
+    color: #383838;
+}
+
+.link-cuadro:hover{
+    color: #36495e;
+}
+
+.titulo{
+    height: 40px;
+    background-color: #c8112d;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+.nav-link.active:hover{
+    color: #FFFFFF !important;
+    text-decoration: underline !important;
+}
+
+.nav-link.tabradius {
+    border-top: 1px solid #ccc !important;
+    border-right: 1px solid #ccc !important;
+    border-left: 1px solid #ccc !important;
+    border-top-left-radius: 1rem !important;
+    border-top-right-radius: 1rem !important;
+}
+.nav-link.tabradius.active {
+    border-top: 1px solid #ccc !important;
+    border-right: 1px solid #ccc !important;
+    border-left: 1px solid #ccc !important;
+    border-top-left-radius: 1rem !important;
+    border-top-right-radius: 1rem !important;
+}
+.nav-tabs.tabradius {
+    border-bottom: 1px solid #ccc !important;
+}
+
+.medio{
+    height: 30px !important;
+}
+
+.inferior{
+    margin-top: 0px;
+    margin-bottom: 0px !important;
+    line-height: 1;
+}
+
+.superior{
+    margin-top: 0px !important;
+    line-height: 2.5;
+}
+
+.modal-lg {
+    max-width: 90% !important;
+}
+
+.table td,
+.table th {
+    padding: .35rem;
+}
+
+.col-nro {
+    width: 1%;
+}
+
+.col-tipo-id-gen {
+    width: 5%;
+}
+
+.col-nom-ape {
+    width: 16%;
+}
+
+.col-id-fecha {
+    width: 10%;
+}
+
+.col-email {
+    width: 16%;
+}
+
+.valido {
+    border: 1px solid #28a745 !important;
+}
+
+.invalido {
+    border: 1px solid #ff0000 !important;
+}
+
+.fecha-invalid {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border: 1.5px solid red !important;
+}
+
+.invalido-form {
+    border: 1.5px solid #ff0000 !important;
+}
+
+.warning {
+    border: 1px solid yellow !important;
+}
+
+.form-control:disabled {
+    background-color: #E0E0E0 !important;
+}
+
+.titulo_tramite{
+    font-size: 24px;
+    text-align: left;
+}
+
+.fondo-gray{
+    background-color: #F5F5F5 !important;
+}
+
+.no-select{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+input[type='file'].btn-file {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+label.file-label {
+    font-size: 16px;
+    font-weight: 300;
+    color: #495057;
+    background-color: #FAFAFA;
+    display: inline-block;
+    transition: all .5s;
+    cursor: pointer;
+    padding: 6px 14px !important;
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 15px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.b-rad-right{
+    border: 1px solid black;
+    border-top-right-radius: 0.6rem;
+    border-bottom-right-radius: 0.6rem;
+}
+
+.btn-stadium{
+    padding: 0.625rem 3rem !important;
+    border-radius: 1.5rem !important;
+}
+
+.hand{
+    cursor: pointer !important;
+}
+
+.texto-verde{
+    color: #28a745 !important;
+}
+
+.texto-gris{
+    color: #495057 !important;
+}
+
+/* .custom-control-input:checked~.custom-control-label::before {
+    background-color: #C8112D;
+    border-color: #C8112D;
+} */
+
+#result_univ, #result_carreras  {
+    position: absolute;
+    width: 200%;
+    max-width: 650px;
+    cursor: pointer;
+    overflow-y: auto;
+    max-height: 400px;
+    box-sizing: border-box;
+    z-index: 1001;
+}
+
+.link-univ:hover, .link-carreras:hover {
+    background-color: #f1f1f1;
+}
+
+#matricula, #licencia, #inscripciontt, #convenio{
+    display: none;
+}
+
+
+/*Personalización de formulario*/
+.row.hiddenFields {
+  display: none;
+}
+.formSection {
+  border: solid 1px #ccc;
+  padding: 40px 20px 0px 20px;
+  margin-bottom: 40px;
+  border-radius: 30px;
+  position: relative;
+}
+h2.sectionName {
+  position: absolute;
+  background-color: white;
+  top: -20px;
+  padding: 10px 20px 0px 20px;
+  font-size: 18px;
+  margin-bottom: 0;
+}
+h2.sectionName:before, h1.formTitle:before, h3.formTitle:before{
+  content: '';
+  width: 5px;
+  height: 70%;
+  background-color: red;
+  position: absolute;
+  margin-left: -20px;
+}
+.formSection input, .formSection select {
+  border-radius: 15px;
+  border-color: black;
+  background-color: #fafafa;
+  border-width: 1px;
+}
+h1.formTitle{
+  width: 100%;
+  text-align: center;
+  margin: 30px 0 0px 0px;
+  font-size: 20px;
+  /*background-color: #efefef;*/
+  padding: 5px;
+  position: relative;
+}
+h3.formTitle{
+  width: 100%;
+  text-align: center;
+  margin: 1px 0 0px 0px;
+  font-size: 20px;
+  padding: 5px;
+  position: relative;
+}
+#tramiteForm .inputDisabled{
+  background-color: #CCCCCC !important;
+  pointer-events:none;
+  user-select: none;
+}
+#tramiteForm input[type="checkbox"] {
+  margin-right: 20px;
+}
+.modal b {
+  font-weight: bold;
+}
+form a:hover {
+  color: #c8112d !important;
+  text-decoration: underline !important;
+}
+#connect p {
+  text-align: center;
+  margin-bottom: 5px;
+}
+span.help-block {
+  font-size: 12px;
+  float: right;
+}
+.preview-pdf {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+  display: none;
+}
+iframe.recibo-pdf, iframe#pdfViewerDiploma, iframe#pdfViewer {
+    width: 100% !important;
+}
+modal-header.pdfViewer {
+    padding: 0px !important;
+    margin-top: 10px !important;
+}
+modal-body.pdfViewer {
+    overflow: hidden !important;
+}
+.formSection .is-invalid{
+    border: 1.5px solid #ff0000 !important;
+}
+.wInput{
+    width: 75% !important;
+}
+.popover {
+    border: 0;
+}
+.blanco{
+    background-color: #fafafa !important;
+}
+.bg-red{
+    background-color: #cc0000;
+    color: white;
+}
+.vertical-center{
+    display: flex;
+    align-items: center;
+}
+.ft16{
+    font-size: 1.6rem !important;
+}
+.ft165{
+    font-size: 1.65rem !important;
+}
+.ft12{
+    font-size: 0.8rem !important;
+}
+.ft08{
+    font-size: 0.88rem !important;
+}
+.border-gray{
+    border: 2px solid #cccccc;
+}
+.mr-cuadro{
+    margin-right: .2rem !important;
+    padding: .5rem !important;
+}
+.sombra-sobre-rojo{
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+}
+.link-portal{
+    color: #FFF !important;
+}
+.link-portal:hover{
+    text-decoration: none !important;
+    color: #cccccc !important;
+}
+results-vigencia:hover {
+    text-decoration: none;
+    opacity: 0.7;
+}
+.price{
+    color: #cc0000 !important;
+    font-size: 1rem !important;
+}
+.btn-calendar{
+    border-radius: 25px !important;
+}
+.fw700{
+    font-weight: 700 !important;
+}
+.info-tramites{
+    width: 80% !important;
+    margin-left: 10% !important;
+}
+@media (max-width: 992px) {
+    .info-tramites {
+        width: 100% !important;
+        margin-left: 0% !important;
+    }
+    .mr-cuadro{
+        margin-left: 0.25rem !important;
+    }
+    .wInput{
+        width: 90% !important;
+    }
+}
