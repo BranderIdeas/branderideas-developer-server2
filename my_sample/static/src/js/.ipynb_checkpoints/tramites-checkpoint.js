@@ -706,7 +706,7 @@ odoo.define('website.tramites', function(require) {
                 }
                 reader.readAsDataURL(file);
             });
-            $("#viewerModalDiploma").modal('show');            
+            $("#viewerModalDiploma").modal('show');          
         }
     });
     

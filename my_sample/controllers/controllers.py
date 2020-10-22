@@ -300,20 +300,20 @@ class MySample(http.Controller):
         ahora = datetime.now() - timedelta(hours=5)
         tramite = http.request.env['x_cpnaa_procedure'].search([('id','=',int(data['id_tramite']))])
         numero_recibo = tramite.x_voucher_number
-#         numero_radicado = tramite.x_rad_number
+        numero_radicado = tramite.x_rad_number
         if (not data['corte'] and numero_recibo) and (data['corte'] == tramite.x_origin_name and numero_recibo):
             pass
         elif not numero_recibo or (data['corte'] and data['corte'] != tramite.x_origin_name):
             consecutivo = http.request.env['x_cpnaa_parameter'].sudo().search([('x_name','=','Consecutivo Recibo de Pago')])
             numero_recibo = int(consecutivo.x_value) + 1
-#             numero_radicado = Sevenet.sevenet_consulta(tramite.id)
-            update = {'x_voucher_number': numero_recibo } #, 'x_radicacion_date': ahora, 'x_rad_number': numero_radicado
+            numero_radicado = Sevenet.sevenet_consulta(tramite.id, 'Recibo')
+            update = {'x_voucher_number': numero_recibo, 'x_radicacion_date': ahora, 'x_rad_number': numero_radicado }
             if data['corte']:
-                update = {'x_voucher_number': numero_recibo,'x_origin_name': data['corte']}
-#                           'x_radicacion_date': ahora, 'x_rad_number': numero_radicado}
+                update = {'x_voucher_number': numero_recibo,'x_origin_name': data['corte'],
+                          'x_radicacion_date': ahora, 'x_rad_number': numero_radicado}
             http.request.env['x_cpnaa_parameter'].browse(consecutivo.id).sudo().write({'x_value':str(numero_recibo)})
             http.request.env['x_cpnaa_procedure'].browse(tramite.id).sudo().write(update)
-        return {'ok': True, 'numero_recibo': str(numero_recibo)} #, 'numero_radicado': str(numero_radicado)+'-'+str(ahora.year)
+        return {'ok': True, 'numero_recibo': str(numero_recibo), 'numero_radicado': str(numero_radicado)+'-'+str(ahora.year)}
     
     # Envia la información necesaria para el recibo de pago o para el pago desde la pasarela
     @http.route('/tramite_fase_inicial', methods=["POST"], type="json", auth='public', website=True)
@@ -351,7 +351,7 @@ class MySample(http.Controller):
         datetime_str = datetime.strptime(data['fecha_pago'], '%Y-%m-%d %H:%M:%S')
         datetime_str = datetime_str + timedelta(hours=5)
         _logger.info('Hora del pago UTC: '+str(datetime_str))
-#         numero_radicado = False
+        numero_radicado = False
         id_user, error, tramite, pago_registrado, mailthread_registrado, origin_name, grado = False, False, False, False, False, False, False
         try:
             tramite = http.request.env['x_cpnaa_procedure'].sudo().search([('id','=',data["id_tramite"])])
@@ -360,7 +360,7 @@ class MySample(http.Controller):
                 if tramite.x_cycle_ID.x_order > 0:
                     raise Exception('Este pago ya fue registrado')
                 if tramite.x_cycle_ID.x_order == 0:
-#                     numero_radicado = Sevenet.sevenet_consulta(tramite.id)
+                    numero_radicado = Sevenet.sevenet_consulta(tramite.id, data['tipo_pago'])
                     if (tramite.x_origin_type.x_name == 'CORTE'):
                         corte_vigente = self.buscar_corte(tramite.x_origin_name)
                         origin_name = corte_vigente['x_name']
@@ -370,9 +370,9 @@ class MySample(http.Controller):
                     ciclo_ID = http.request.env["x_cpnaa_cycle"].sudo().search(["&",("x_service_ID.id","=",tramite["x_service_ID"].id),("x_order","=",1)])
                     update = {'x_cycle_ID': ciclo_ID.id,'x_radicacion_date': datetime_str, 'x_pay_datetime': datetime_str,
                               'x_pay_type': data['tipo_pago'],'x_consignment_number': data['numero_pago'], 'x_bank': data['banco'],
-                              'x_consignment_price': data['monto_pago'],'x_origin_name': origin_name} #, 'x_rad_number': numero_radicado
+                              'x_consignment_price': data['monto_pago'],'x_origin_name': origin_name, 'x_rad_number': numero_radicado}
                     pago_registrado = http.request.env['x_cpnaa_procedure'].browse(tramite['id']).sudo().write(update)
-#                     numero_radicado = str(numero_radicado) +'-'+ str(datetime_str.year)
+                    numero_radicado = str(numero_radicado) +'-'+ str(datetime_str.year)
                     if not pago_registrado:
                         raise Exception('Su pago ha sido exitoso pero no se pudo completar el trámite, por favor envie esta información al correo info@cpnaa.gov.co')
             else:
@@ -391,13 +391,13 @@ class MySample(http.Controller):
                 error = 'Se registro el pago pero no se escribio el mailthread'+'\nTrámite ID: '+str(tramite.id)+'\n'+str(sys.exc_info())
         if not error and mailthread_registrado:
             return { 'ok': True, 'message': 'Trámite actualizado con exito y registrado en el mailthread', 
-                    'mailthread': mailthread_registrado.id, 'error': False, 'id_user': user.id } #'numero_radicado': numero_radicado, 
+                    'mailthread': mailthread_registrado.id, 'error': False, 'id_user': user.id, 'numero_radicado': numero_radicado }
         if pago_registrado and error:
             _logger.info(error)
             return { 'ok': True, 'message': 'Trámite actualizado con exito', 'error': error, 
-                    'id_user': user.id } #'numero_radicado': numero_radicado, 
+                    'id_user': user.id, 'numero_radicado': numero_radicado } 
         if not pago_registrado:        
-            return { 'ok': False, 'error': error, 'id_user': user.id } #, 'numero_radicado': numero_radicado
+            return { 'ok': False, 'error': error, 'id_user': user.id, 'numero_radicado': numero_radicado }
         
     def grado_check_pagos(self, grado):
         _logger.info(grado)
@@ -457,6 +457,63 @@ class MySample(http.Controller):
     @http.route('/tramites/solicitud_virtual/<model("x_cpnaa_procedure"):tramite>', auth='public', website=True)
     def preguntas_mat_virtual(self, tramite):
         return http.request.render('my_sample.preguntas_mat_virtual', {'tramite': tramite})
+    
+    # Retorna los datos del trámite para el formulario de edición
+    @http.route('/validar_respuestas', methods=["POST"], type="json", auth='public', website=True)
+    def validar_respuestas(self, **kw):
+        correctas, tramite_valido, success = None, False, False
+        min_validas = 3
+        data = kw.get('data')
+        camposString = ['x_studio_fecha_de_grado_2','x_enrollment_number']
+        camposManyTo = ['x_studio_ciudad_de_expedicin','x_studio_carrera_1','x_studio_universidad_5']
+        tramites = http.request.env['x_cpnaa_procedure'].sudo().search([('x_studio_tipo_de_documento_1.id','=',data['x_doc_type_ID']),
+                                                                        ('x_studio_documento_1','=',data['x_document'])])
+        for tram in tramites:
+            correctas = 0
+            for val in camposString:
+                if str(tram[val]) == str(data[val]):
+                    correctas += 1
+            for val in camposManyTo:
+                if str(tram[val]['id']) == str(data[val]):
+                    correctas += 1
+            if correctas >= min_validas:
+                tramite_valido = tram
+                success = True
+        http.request.env['x_virtual_activacion_procedure'].sudo().create({
+            'x_name': 'ACTIVACION-VIRTUAL-'+tramites[0].x_studio_nombres+'-'+tramites[0].x_studio_apellidos,
+            'x_procedure_ID': tramites[0].id,
+            'x_success': success,
+        })
+        if tramite_valido:
+          # Asigna contraseña
+          password = str(tramite_valido.id)+str(tramite_valido.x_resolution_ID.x_consecutive)
+
+          #Crea user odoo si no tiene
+          search_user = http.request.env["res.users"].search([("login","=",tramite_valido.x_studio_documento_1)])
+          if search_user:
+            http.request.env['mail.template'].browse(37).send_mail(tramite_valido.id,force_send=True)
+          else:
+            http.request.env['mail.template'].browse(29).send_mail(tramite_valido.id,force_send=True)
+            http.request.env["res.users"].create({
+              "name": tramite_valido.x_studio_nombres +' '+ tramite_valido.x_studio_apellidos,
+              "login" : tramite_valido.x_studio_documento_1,
+              "groups_id": [45,8],
+              "password": password,
+              "new_password": password
+            })
+            return { 'ok': True, 'data': { 'email': self.email_parcial(tramite_valido.x_studio_correo_electrnico), 
+                                           'servicio': tramite_valido.x_service_ID.x_name } }
+        else:
+            return { 'ok': False, 'message': 'No cumple con el minimo de respuestas validas' }
+    
+    def email_parcial(self, email):
+        dominio  = email.split('@')[1]
+        username = email.split('@')[0]
+        if len(username) >= 4:
+            cant_visible = len(username) - 4;
+            return username[0:cant_visible] + '*' * 4 +'@'+ dominio
+        else:
+            return email
     
     # Ruta que renderiza el inicio del trámite certificado de vigencia virtual
     @http.route('/tramites/certificado_de_vigencia', auth='public', website=True)
@@ -816,23 +873,27 @@ class MySample(http.Controller):
     @http.route('/get_universidades', methods=["POST"], type="json", auth='public', website=True)
     def get_universidades(self, **kw):
         cadena = kw.get('cadena')
-        tipo_universidad = kw.get('tipo_universidad')
-        return {'universidades': http.request.env['x_cpnaa_user'].sudo().search_read([('x_user_type_ID.id','=',3),('x_institution_type_ID.id', '=', tipo_universidad),
+        tipo_universidad = [kw.get('tipo_universidad')]
+        if not kw.get('tipo_universidad'):
+            tipo_universidad = [1,2,3]
+        return {'universidades': http.request.env['x_cpnaa_user'].sudo().search_read([('x_user_type_ID.id','=',3),('x_institution_type_ID.id', 'in', tipo_universidad),
                                                                                ('x_name', 'ilike', cadena)],['id','x_name'], limit=6)}
     
     # Retorna las carreas que coinciden con la cadena y nivel profesional recibidos
     @http.route('/get_carreras', methods=["POST"], type="json", auth='public', website=True)
     def get_carreras(self, **kw):
         cadena = kw.get('cadena')
-        nivel_profesional = kw.get('nivel_profesional')
+        nivel_profesional = [kw.get('nivel_profesional')]
+        if not kw.get('nivel_profesional'):
+            nivel_profesional = [1,2,3]
         id_genero = kw.get('id_genero')
         nombre_carrera = 'x_name'
         _logger.info(id_genero)
         if id_genero == '2':
             nombre_carrera = 'x_female_name'
-        return {'carreras': http.request.env['x_cpnaa_career'].sudo().search_read([('x_level_ID.id','=',nivel_profesional),
+        return {'carreras': http.request.env['x_cpnaa_career'].sudo().search_read([('x_level_ID.id','in',nivel_profesional),
                                                                                        (nombre_carrera, 'ilike', cadena)],
-                                                                                       ['id',nombre_carrera], limit=6)}
+                                                                                       ['id',nombre_carrera], limit=8)}
     
     # Retorna el nombre de la carrera según el genero 
     @http.route('/get_carrera_genero', methods=["POST"], type="json", auth='public', website=True)

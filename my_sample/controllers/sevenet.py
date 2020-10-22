@@ -60,7 +60,7 @@ def sevenet_consulta(id_tramite, tipo_pago):
         if type(tram_json[key]) == bytes and key_to_name(key):
             documento = '<documento> #documento </documento>'
             nombre_original = '<nombreoriginal>%s%s.pdf</nombreoriginal>' % (key_to_name(key), tramite.x_studio_documento_1)
-            cuerpo = '<cuerpo>%s</cuerpo>' % tram_json[key]
+            cuerpo = '<cuerpo>%s</cuerpo>' % str(tram_json[key])[2:-1]
             documento = documento.replace('#documento','%s %s' % (nombre_original, cuerpo))
             docs_pdf.append(documento)
     
@@ -70,7 +70,7 @@ def sevenet_consulta(id_tramite, tipo_pago):
     datos = datos.replace('#adjuntos',adjuntos)
     client = Client(url)
     resp = client.service.Registrar(datos)
-    # _logger.info(datos)
+    _logger.info(datos)
 
     root = etree.XML(resp)
     body = etree.SubElement(root, "textoRespuesta")
